@@ -1,0 +1,12 @@
+diff --git a/mkfile b/mkfile
+index a1ad519..05bcef4 100644
+--- a/mkfile
++++ b/mkfile
+@@ -19,7 +19,6 @@ EMUDIRS=\
+ 	libdraw\
+ 	libprefab\
+ 	libtk\
+-	libfreetype\
+ 	libmemdraw\
+ 	libmemlayer\
+ 	libdynld\

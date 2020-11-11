@@ -1,0 +1,47 @@
+diff --git a/makemk.sh b/makemk.sh
+index 1e18782..976d6a9 100755
+--- a/makemk.sh
++++ b/makemk.sh
+@@ -8,8 +8,8 @@
+ 
+ # change these defines as appropriate here or in mkconfig
+ # ROOT should be the root of the Inferno tree
+-ROOT=/usr/inferno
+-SYSTARG=FreeBSD
++ROOT=/usr/inferno-os
++SYSTARG=Linux
+ OBJTYPE=386
+ SYSTYPE=posix
+ 
+diff --git a/mkconfig b/mkconfig
+index f189dca..21a8688 100644
+--- a/mkconfig
++++ b/mkconfig
+@@ -4,7 +4,7 @@
+ #	They are almost always the same.
+ 
+ #	On Nt systems, the ROOT path MUST be of the form `drive:/path'
+-ROOT=/usr/inferno
++ROOT=/usr/inferno-os
+ 
+ #
+ #	Specify the flavour of Tk (std for standard builds)
+@@ -14,15 +14,15 @@ TKSTYLE=std
+ #
+ #	Except for building kernels, SYSTARG must always be the same as SYSHOST
+ #
+-SYSHOST=Plan9		# build system OS type (AIX, Hp, Inferno, Irix, Linux, MacOSX, Nt, Plan9, Solaris)
++SYSHOST=Linux		# build system OS type (AIX, Hp, Inferno, Irix, Linux, MacOSX, Nt, Plan9, Solaris)
+ SYSTARG=$SYSHOST		# target system OS type (AIX, Hp, Inferno, Irix, Linux, Nt, Plan9, Solaris)
+ 
+ #
+ #	specify the architecture of the target system - Plan 9 imports it from the
+ #	environment; for other systems it is usually just hard-coded
+ #
+-#OBJTYPE=386			# target system object type (eg, 386, arm, mips, power, s800, sparc)
+-OBJTYPE=$objtype
++OBJTYPE=386			# target system object type (eg, 386, arm, mips, power, s800, sparc)
++#OBJTYPE=$objtype
+ 
+ #
+ #	no changes required beyond this point
