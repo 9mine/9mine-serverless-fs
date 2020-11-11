@@ -1,0 +1,15 @@
+diff --git a/emu/port/kproc-pthreads.c b/emu/port/kproc-pthreads.c
+index a15a7cd..3511654 100644
+--- a/emu/port/kproc-pthreads.c
++++ b/emu/port/kproc-pthreads.c
+@@ -18,6 +18,10 @@
+ #define PTHREAD_STACK_MIN ((size_t)sysconf(_SC_THREAD_STACK_MIN))
+ #endif
+ 
++#define pthread_yield() (sched_yield())
++#define PTHREAD_STACK_MIN ((size_t)sysconf(_SC_THREAD_STACK_MIN))
++
++
+ 
+ typedef struct Osdep Osdep;
+ struct Osdep {
