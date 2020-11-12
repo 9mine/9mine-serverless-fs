@@ -16,7 +16,7 @@ jobs:
         run: docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: push image to registry
-        run: docker image push ${{ secrets.REGISTRY_USERNAME }}/sls2fs:${GITHUB_REF##*/}
+        run: docker image push ${{ secrets.REGISTRY_USERNAME }}/slsfs:${GITHUB_REF##*/}
       
       - name: Notify Telegram
         uses: yanzay/notify-telegram@v0.1.0
