@@ -1,0 +1,9 @@
+load file2chan
+load std
+ndb/cs
+for host_var in `{ os env } { '{'$host_var'}' }
+
+dir = $EXPORT_PATH
+port = $EXPORT_PORT
+
+listen -A 'tcp!*!'$port { export $dir & } &
