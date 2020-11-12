@@ -76,4 +76,4 @@ RUN mkdir -p /usr/inferno-os/host/slsfs
 
 COPY --from=builder /slsfs /slsfs
 
-ENTRYPOINT ["sh", "-c", "execfuse-static /slsfs /usr/inferno-os/host/slsfs && export EXPORT_PATH=/host && export EXPORT_PORT=1917 && emu-g /dis/sh /lib/sh/profile"]
+ENTRYPOINT ["sh", "-c", "execfuse-static /slsfs /usr/inferno-os/host/slsfs && emu-g /dis/sh /lib/sh/profile"]
