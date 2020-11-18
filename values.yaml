@@ -1,0 +1,41 @@
+image:
+  repository: dievri/9mine-serverless-fs
+  pullPolicy: Always
+  tag: "master"
+
+service:
+  type: ClusterIP
+  port: 3213
+
+fs: |
+    {% include './common.j2' %}
+    wrapper_name: serverless
+
+    fs:
+      "/":
+        cache:  3600
+        getattr: *dir
+        readdir: 
+          - funcs
+          - k8s
+        "/funcs":
+          cache: 3600
+          readdir:
+            - kubeless
+          getattr: *dir
+          "/kubeless":
+            cache: 300 
+            readdir: |
+              kubeless function list -o json | jq -r '.[].metadata.name'
+            getattr: *dir
+        "/k8s":
+          readdir:
+            - kubeconfig
+          getattr: *dir
+          "/kubeconfig":
+            write_file: |
+              test -d ${HOME}/.kube || mkdir ${HOME}/.kube  
+              cat $CACHE_FILE_NAME > ${HOME}/.kube/config
+            read_file: 
+              cat ${HOME}/.kube/config
+            getattr: *file
