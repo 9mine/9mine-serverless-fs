@@ -8,7 +8,7 @@ service:
   port: 3213
 
 fs: |
-    {% include './common.j2' %}
+    {% include 'common.j2' %}
     wrapper_name: serverless
 
     fs:
