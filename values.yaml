@@ -24,10 +24,13 @@ fs: |
             - kubeless
           getattr: *dir
           "/kubeless":
-            cache: 300 
+            cache: 15
             readdir: |
               kubeless function list -n default -o json | jq -r '.[].metadata.name'
             getattr: *dir
+            "/.*": 
+              cache: 3600
+              getattr: *file
         "/k8s":
           readdir:
             - kubeconfig
