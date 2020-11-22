@@ -14,31 +14,47 @@ fs: |
     fs:
       "/":
         cache:  3600
-        getattr: *dir
+        <<: *is_dir
         readdir: 
-          - funcs
-          - k8s
+          list:
+            - funcs
+            - ctl
+            - k8s
         "/funcs":
+          <<: *is_dir
           cache: 3600
           readdir:
-            - kubeless
-          getattr: *dir
+            list:
+              - kubeless
           "/kubeless":
+            <<: *is_dir
             cache: 15
-            readdir: |
-              kubeless function list -n default -o json | jq -r '.[].metadata.name'
-            getattr: *dir
+            readdir: 
+              sh: kubeless function list -n default -o json | jq -r '.[].metadata.name'
             "/.*": 
+              <<: *is_file
+              name: func_name
               cache: 3600
-              getattr: *file
-        "/k8s":
+              read_file: 
+                sh: |
+                  kubeless function call ${func_name} -n default
+        "/ctl":
+          <<: *is_file
+          cache: 3600
           readdir:
-            - kubeconfig
-          getattr: *dir
+            list:
+              - kubeless
+            
+        "/k8s":
+          <<: *is_dir
+          readdir:
+            list:
+              - kubeconfig
           "/kubeconfig":
-            write_file: |
-              test -d ${HOME}/.kube || mkdir ${HOME}/.kube  
-              cat $CACHE_FILE_NAME > ${HOME}/.kube/config
+            <<: *is_file
+            write_file: 
+              sh: |
+                test -d ${HOME}/.kube || mkdir ${HOME}/.kube  
+                cat $CACHE_FILE_NAME > ${HOME}/.kube/config
             read_file: 
-              cat ${HOME}/.kube/config
-            getattr: *file
+              sh: cat ${HOME}/.kube/config
