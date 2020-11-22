@@ -3,9 +3,23 @@ image:
   pullPolicy: Always
   tag: "master"
 
+initContainerImage:
+  repository: dievri/execfuse-jinja2
+  tag: "master"
+  pullPolicy: Always
+
+serviceAccount:
+  create: false
+
+securityContext: 
+  privileged: true
+  capabilities:
+    add:
+      - SYS_ADMIN
+
 service:
   type: ClusterIP
-  port: 3213
+  port: 2121
 
 fs: |
     {% include 'common.j2' %}
