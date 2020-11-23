@@ -53,12 +53,42 @@ fs: |
                 sh: |
                   kubeless function call ${func_name} -n default
         "/ctl":
-          <<: *is_file
+          <<: *is_dir
           cache: 3600
           readdir:
             list:
               - kubeless
-            
+          "/kubeless":
+            <<: *is_dir
+            readdir:
+              list:
+                - python
+                - nodejs
+                - golang
+                - ruby
+                - php
+            "/python":
+              <<: *is_file
+              write_file: 
+                sh: >
+                  export TEMP_DIR=`mktemp -d /tmp/kubeless_XXXXXXX`;
+                  cd $TEMP_DIR;
+                  export FUNC_NAME=python-`date +%s`;
+                  sed -i'' "s/hello/$FUNC_NAME/g" serverless.yml handler.py;
+                  sls create --template kubeless-python --name $FUNC_NAME;
+                  cat $PAYLOAD_TMP_FILE > handler.py;
+                  sls plugin install --name serverless-kubeless;
+                  npm install;
+                  sls deploy;
+            "/nodejs":
+              <<: *is_file
+            "/golang":
+              <<: *is_file
+            "/ruby":
+              <<: *is_file
+            "/php":
+              <<: *is_file
+
         "/k8s":
           <<: *is_dir
           readdir:
