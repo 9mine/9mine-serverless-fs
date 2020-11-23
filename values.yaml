@@ -57,8 +57,8 @@ fs: |
               "/in":
                 <<: *is_dir
                 name: direction
-                readdir:
-                  list: [ "alice", "bob" ]
+                #readdir:
+                #  list: [ "alice", "bob" ]
                 "/[^\/]+": 
                   <<: *is_file
                   name: input_name    
@@ -67,7 +67,7 @@ fs: |
                       ABS_DIR="${HOME_TMP}/${func_name}/in"
                       ABS_PATH="${ABS_DIR}/${input_name}"
                       test -d "${ABS_DIR}" || mkdir -p "${ABS_DIR}"
-                      cat ${PAYLOAD_FILE} > ${ABS_PATH}
+                      kubeless function call -d"`cat ${PAYLOAD_FILE}`"  ${func_name} -n default > ${ABS_PATH}
 
               "/out":
                 <<: *is_dir
