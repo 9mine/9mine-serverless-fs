@@ -74,20 +74,25 @@ fs: |
                   export TEMP_DIR=`mktemp -d /tmp/kubeless_XXXXXXX`;
                   cd $TEMP_DIR;
                   export FUNC_NAME=python-`date +%s`;
-                  sed -i'' "s/hello/$FUNC_NAME/g" serverless.yml handler.py;
                   sls create --template kubeless-python --name $FUNC_NAME;
-                  cat $PAYLOAD_TMP_FILE > handler.py;
+                  sed -i'' "s/hello/$FUNC_NAME/g" serverless.yml handler.py;
+                  cat $PAYLOAD_FILE > handler.py;
                   sls plugin install --name serverless-kubeless;
                   npm install;
                   sls deploy;
             "/nodejs":
               <<: *is_file
-            "/golang":
-              <<: *is_file
-            "/ruby":
-              <<: *is_file
-            "/php":
-              <<: *is_file
+              write_file: 
+                sh: >
+                  export TEMP_DIR=`mktemp -d /tmp/kubeless_XXXXXXX`;
+                  cd $TEMP_DIR;
+                  export FUNC_NAME=nodejs-`date +%s`;
+                  sls create --template kubeless-nodejs --name $FUNC_NAME;
+                  sed -i'' "s/hello/$FUNC_NAME/g" serverless.yml handler.js;
+                  cat $PAYLOAD_FILE > handler.js;
+                  sls plugin install --name serverless-kubeless;
+                  npm install;
+                  sls deploy;
 
         "/k8s":
           <<: *is_dir
