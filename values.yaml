@@ -41,17 +41,53 @@ fs: |
             list:
               - kubeless
           "/kubeless":
+            name: driver
             <<: *is_dir
             cache: 15
             readdir: 
               sh: kubeless function list -n default -o json | jq -r '.[].metadata.name'
-            "/.*": 
-              <<: *is_file
+            "/[^\/]+": 
               name: func_name
+              <<: *is_dir
               cache: 3600
-              read_file: 
-                sh: |
-                  kubeless function call ${func_name} -n default
+              readdir:
+                list:
+                  - in 
+                  - out
+              "/in":
+                <<: *is_dir
+                name: direction
+                readdir:
+                  list: [ "alice", "bob" ]
+                "/[^\/]+": 
+                  <<: *is_file
+                  name: input_name    
+                  write_file:
+                    sh:  |     
+                      ABS_DIR="${HOME_TMP}/${func_name}/in"
+                      ABS_PATH="${ABS_DIR}/${input_name}"
+                      test -d "${ABS_DIR}" || mkdir -p "${ABS_DIR}"
+                      cat ${PAYLOAD_FILE} > ${ABS_PATH}
+
+              "/out":
+                <<: *is_dir
+                name: direction
+                readdir:
+                  list: [ "alice", "bob" ]
+                "/[^\/]+": 
+                  <<: *is_file
+                  name: input_name    
+                  read_file:
+                    sh:  |     
+                      ABS_DIR="${HOME_TMP}/${func_name}/in"
+                      ABS_PATH="${ABS_DIR}/${input_name}"
+                      cat $ABS_PATH
+
+
+
+              #read_file: 
+              #  sh: |
+              #    kubeless function call ${func_name} -n default
         "/ctl":
           <<: *is_dir
           cache: 3600
